@@ -1,0 +1,17 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Multi-tenant Cloud Storage Rules:
+    // Setiap user memiliki folder terisolasi di users/{userId}/...
+    match /users/{userId}/{allPaths=**} {
+      // Izinkan baca dan tulis jika user login dan UID cocok
+      allow read: if request.auth != null && request.auth.uid == userId;
+      
+      // Izinkan upload gambar / dokumen struk maksimal 5MB
+      allow write: if request.auth != null 
+                   && request.auth.uid == userId
+                   && request.resource.size < 5 * 1024 * 1024;
+    }
+  }
+}
