@@ -25,6 +25,7 @@ import {
   ChevronRight,
   Calculator,
   GraduationCap,
+  BookOpen,
 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -295,6 +296,38 @@ export default function DashboardPage() {
               <h4 className="text-xs font-bold text-purple-950">Laba Rugi</h4>
               <p className="text-[10px] text-purple-700">Evaluasi toko</p>
             </div>
+          </Link>
+        </div>
+
+        {/* User Guide & Manual Book Quick Access Banner */}
+        <div className="rounded-2xl border border-indigo-200 bg-gradient-to-r from-indigo-50/90 via-purple-50/50 to-emerald-50/40 p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-2xs">
+          <div className="flex items-center gap-3.5">
+            <div className="h-11 w-11 rounded-2xl bg-gradient-to-tr from-indigo-600 to-purple-500 text-white flex items-center justify-center shrink-0 shadow-md">
+              <BookOpen className="h-5 w-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h4 className="font-extrabold text-slate-900 text-xs sm:text-sm">
+                  Pusat Panduan & Manual Book Sistem
+                </h4>
+                <span className="text-[9px] font-black uppercase bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded-full">
+                  Dokumentasi
+                </span>
+              </div>
+              <p className="text-[11px] sm:text-xs text-slate-600 mt-0.5">
+                Pelajari cara kerja alur kasir, fitur 6 modul industri, setting printer thermal, dan perhitungan HPP resep otomatis.
+              </p>
+            </div>
+          </div>
+
+          <Link href="/docs" className="w-full sm:w-auto shrink-0">
+            <Button
+              size="sm"
+              className="touch-press w-full sm:w-auto h-9 px-4 text-xs font-black bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-xs gap-1.5"
+            >
+              <span>Buka Manual Book</span>
+              <ChevronRight className="h-3.5 w-3.5" />
+            </Button>
           </Link>
         </div>
 

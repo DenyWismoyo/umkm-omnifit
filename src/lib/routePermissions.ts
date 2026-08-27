@@ -100,6 +100,14 @@ export const ROUTE_PERMISSIONS: Record<string, RoutePermissionRule> = {
     featureName: "Pengaturan Toko & QR",
     featureDescription: "Profil toko, QRIS statis, struk thermal, dan manajemen kasir",
   },
+  "/docs": {
+    requiresAuth: true,
+    allowedRoles: ["owner", "supervisor", "cashier"],
+    allowedTiers: ["basic", "pro", "enterprise"],
+    trialAllowed: true,
+    featureName: "Buku Panduan & Manual Book",
+    featureDescription: "Panduan lengkap penggunaan fitur kasir dan 6 modul industri",
+  },
 
   // Fitur Spesifik Industri (Hanya untuk Industri Tertentu Tier PRO / Enterprise / Trial)
   "/orders": {

@@ -15,6 +15,7 @@ import {
   Check,
   RefreshCw,
   QrCode,
+  BookOpen,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { INDUSTRY_METADATA } from "@/data/subscriptionPlans";
@@ -276,26 +277,61 @@ export function ProfileDropdown() {
                   </div>
                   <ChevronRight className="h-4 w-4 text-slate-400" />
                 </Link>
+
+                <Link
+                  href="/docs"
+                  onClick={() => setIsOpen(false)}
+                  className="touch-press flex items-center justify-between rounded-xl px-3 py-2 text-slate-700 hover:bg-slate-50 font-semibold transition-colors"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <div className="h-7 w-7 rounded-lg bg-indigo-50 text-indigo-700 flex items-center justify-center">
+                      <BookOpen className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <span className="block font-bold text-slate-900">Buku Panduan & Manual</span>
+                      <span className="text-[10px] text-slate-400 font-normal">Panduan fitur 6 industri & kasir</span>
+                    </div>
+                  </div>
+                  <ChevronRight className="h-4 w-4 text-slate-400" />
+                </Link>
               </>
             )}
 
             {isCashier && (
-              <Link
-                href="/pos"
-                onClick={() => setIsOpen(false)}
-                className="touch-press flex items-center justify-between rounded-xl px-3 py-2 text-slate-700 hover:bg-slate-50 font-semibold transition-colors"
-              >
-                <div className="flex items-center gap-2.5">
-                  <div className="h-7 w-7 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center">
-                    <Store className="h-4 w-4" />
+              <>
+                <Link
+                  href="/docs"
+                  onClick={() => setIsOpen(false)}
+                  className="touch-press flex items-center justify-between rounded-xl px-3 py-2 text-slate-700 hover:bg-slate-50 font-semibold transition-colors"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <div className="h-7 w-7 rounded-lg bg-indigo-50 text-indigo-700 flex items-center justify-center">
+                      <BookOpen className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <span className="block font-bold text-slate-900">Buku Panduan Kasir</span>
+                      <span className="text-[10px] text-slate-400 font-normal">Panduan transaksi & printer</span>
+                    </div>
                   </div>
-                  <div>
-                    <span className="block font-bold text-slate-900">Kembali ke Kasir POS</span>
-                    <span className="text-[10px] text-slate-400 font-normal">Akses kasir aktif</span>
+                  <ChevronRight className="h-4 w-4 text-slate-400" />
+                </Link>
+                <Link
+                  href="/pos"
+                  onClick={() => setIsOpen(false)}
+                  className="touch-press flex items-center justify-between rounded-xl px-3 py-2 text-slate-700 hover:bg-slate-50 font-semibold transition-colors"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <div className="h-7 w-7 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center">
+                      <Store className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <span className="block font-bold text-slate-900">Kembali ke Kasir POS</span>
+                      <span className="text-[10px] text-slate-400 font-normal">Akses kasir aktif</span>
+                    </div>
                   </div>
-                </div>
-                <ChevronRight className="h-4 w-4 text-slate-400" />
-              </Link>
+                  <ChevronRight className="h-4 w-4 text-slate-400" />
+                </Link>
+              </>
             )}
           </div>
 
