@@ -17,8 +17,8 @@ import {
   onSnapshot,
   Unsubscribe,
   arrayUnion,
-} from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { db, functions } from "@/lib/firebase";
+import { httpsCallable } from "firebase/functions";
 import {
   ShopProfile,
   Product,
@@ -633,7 +633,36 @@ export async function verifyCashierLoginByStoreCode(
   cashier: Cashier;
   shopProfile: ShopProfile | null;
 } | null> {
-  const storeMapping = await getStoreByCode(storeCode);
+  const cleanCode = storeCode.toUpperCase().trim();
+  const cleanPin = pin.trim();
+
+  // 1. Coba verifikasi melalui Serverless Cloud Function (Aman & Terisolasi)
+  try {
+    const verifyPinCallable = httpsCallable<
+      { storeCode: string; pin: string },
+      {
+        success: boolean;
+        ownerUid: string;
+        shopName: string;
+        cashier: Cashier;
+      }
+    >(functions, "verifyCashierPin");
+
+    const result = await verifyPinCallable({ storeCode: cleanCode, pin: cleanPin });
+    if (result.data && result.data.success) {
+      const profile = await getShopProfile(result.data.ownerUid);
+      return {
+        ownerUid: result.data.ownerUid,
+        cashier: result.data.cashier,
+        shopProfile: profile,
+      };
+    }
+  } catch (fnErr: any) {
+    console.warn("Cloud Functions verifyCashierPin fallback to Firestore direct check:", fnErr?.message || fnErr);
+  }
+
+  // 2. Fallback Direct Firestore Check
+  const storeMapping = await getStoreByCode(cleanCode);
   if (!storeMapping || !storeMapping.isActive) {
     return null;
   }
@@ -645,7 +674,7 @@ export async function verifyCashierLoginByStoreCode(
   ]);
 
   const targetCashier = cashierList.find(
-    (c) => c.pin === pin.trim() && c.isActive
+    (c) => c.pin === cleanPin && c.isActive
   );
 
   if (!targetCashier) {

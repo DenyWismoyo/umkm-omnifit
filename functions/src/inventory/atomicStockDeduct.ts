@@ -1,7 +1,5 @@
 import * as functions from "firebase-functions";
-import * as admin from "firebase-admin";
-
-const db = admin.firestore();
+import { db, admin } from "../admin";
 
 /**
  * Firestore Trigger: Dijalankan otomatis di server saat transaksi kasir tersimpan di `users/{userId}/transactions/{trxId}`.

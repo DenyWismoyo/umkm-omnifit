@@ -1,7 +1,5 @@
 import * as functions from "firebase-functions";
-import * as admin from "firebase-admin";
-
-const db = admin.firestore();
+import { db } from "../admin";
 
 /**
  * Scheduled Cron Job: Berjalan setiap hari pada pukul 00:00 WIB (17:00 UTC)

@@ -1,7 +1,4 @@
-import * as admin from "firebase-admin";
-
-// Initialize Firebase Admin SDK
-admin.initializeApp();
+import "./admin";
 
 // Export Auth & Cashier Functions
 export { onUserCreated } from "./auth/onUserCreated";

@@ -1,7 +1,5 @@
 import * as functions from "firebase-functions";
-import * as admin from "firebase-admin";
-
-const db = admin.firestore();
+import { db } from "../admin";
 
 /**
  * Trigger otomatis saat user baru terdaftar di Firebase Authentication (Google Login).
