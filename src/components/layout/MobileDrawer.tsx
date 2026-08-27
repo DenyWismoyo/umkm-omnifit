@@ -31,6 +31,7 @@ import { toast } from "sonner";
 import { usePwaInstall } from "@/components/common/PwaInstallPrompt";
 import { checkRouteAccess } from "@/lib/routePermissions";
 import { INDUSTRY_METADATA } from "@/data/subscriptionPlans";
+import { INDUSTRY_NAV_CONFIG, NAV_ITEM_REGISTRY } from "@/lib/industryConfig";
 
 interface MobileDrawerProps {
   isOpen: boolean;
@@ -56,12 +57,12 @@ export function MobileDrawer({
     signOut,
     isTrialActive,
     trialDaysLeft,
-    openUpgradeModal,
   } = useAuth();
   const { promptInstall } = usePwaInstall();
 
   const isCashier = activeRole === "cashier";
   const currentIndustry = INDUSTRY_METADATA[activeIndustry] || INDUSTRY_METADATA.fnb;
+  const navSections = INDUSTRY_NAV_CONFIG[activeIndustry] || INDUSTRY_NAV_CONFIG.universal;
 
   const handleSignOut = async () => {
     try {
@@ -74,100 +75,6 @@ export function MobileDrawer({
     }
   };
 
-  const MENU_SECTIONS = [
-    {
-      title: "Operasional Utama",
-      items: [
-        {
-          title: "Mesin Kasir (POS)",
-          href: "/pos",
-          icon: ShoppingCart,
-          badge: "Kasir",
-          badgeColor: "bg-emerald-600 text-white",
-          roles: ["owner", "supervisor", "cashier"],
-        },
-        {
-          title: "Antrean Pesanan",
-          href: "/orders",
-          icon: BellRing,
-          badge: "Live",
-          badgeColor: "bg-amber-500 text-slate-950",
-          roles: ["owner", "supervisor", "cashier"],
-        },
-        {
-          title: "Katalog Produk & Stok",
-          href: "/products",
-          icon: PackageCheck,
-          roles: ["owner", "supervisor", "cashier"],
-        },
-        {
-          title: "Stok Bahan Baku & HPP",
-          href: "/inventory",
-          icon: Boxes,
-          badge: "Auto",
-          badgeColor: "bg-emerald-500 text-slate-950",
-          roles: ["owner", "supervisor"],
-        },
-        {
-          title: "Pelanggan & Kasbon",
-          href: "/debts",
-          icon: Users,
-          roles: ["owner", "supervisor", "cashier"],
-        },
-      ],
-    },
-    {
-      title: "Finansial & Analisis",
-      items: [
-        {
-          title: "Dashboard Toko",
-          href: "/dashboard",
-          icon: LayoutDashboard,
-          roles: ["owner", "supervisor"],
-        },
-        {
-          title: "Kalkulator HPP & Resep",
-          href: "/hpp",
-          icon: Calculator,
-          badge: "Cerdas",
-          badgeColor: "bg-amber-500 text-white",
-          roles: ["owner"],
-        },
-        {
-          title: "Pencatatan Biaya Toko",
-          href: "/expenses",
-          icon: TrendingDown,
-          roles: ["owner"],
-        },
-        {
-          title: "Laporan Laba / Rugi",
-          href: "/reports",
-          icon: FileBarChart2,
-          roles: ["owner"],
-        },
-      ],
-    },
-    {
-      title: "Edukasi & Pertumbuhan",
-      items: [
-        {
-          title: "Akademi & Playbook Bisnis",
-          href: "/academy",
-          icon: GraduationCap,
-          badge: "9 Pilar",
-          badgeColor: "bg-blue-600 text-white",
-          roles: ["owner", "supervisor"],
-        },
-        {
-          title: "Pengaturan Toko",
-          href: "/settings",
-          icon: Settings,
-          roles: ["owner"],
-        },
-      ],
-    },
-  ];
-
   if (!isOpen) return null;
 
   return (
@@ -178,15 +85,13 @@ export function MobileDrawer({
         onClick={onClose}
       />
 
-      {/* Drawer Panel */}
-      <div className="relative w-[84%] max-w-xs bg-white h-full shadow-2xl flex flex-col z-10 animate-in slide-in-from-left duration-250">
-        {/* Drawer Header with Shop & User Info */}
-        <div className="p-4 bg-gradient-to-r from-emerald-950 via-slate-900 to-teal-950 text-white relative overflow-hidden shrink-0 space-y-2.5">
-          <div className="absolute top-0 right-0 -mt-6 -mr-6 h-28 w-28 rounded-full bg-emerald-500/10 blur-xl pointer-events-none" />
-
-          <div className="relative z-10 flex items-center justify-between">
-            <div className="flex items-center gap-2.5 min-w-0">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 text-slate-950 font-black shrink-0 shadow-xs">
+      {/* Drawer Content */}
+      <div className="relative w-[85vw] max-w-xs bg-white h-full shadow-2xl flex flex-col z-10 animate-in slide-in-from-left duration-250">
+        {/* Drawer Header with Shop & User Profile */}
+        <div className="p-4 bg-gradient-to-br from-slate-900 via-emerald-950 to-slate-900 text-white space-y-3 shrink-0">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <div className="h-9 w-9 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold">
                 <Store className="h-5 w-5" />
               </div>
               <div className="min-w-0 leading-tight">
@@ -265,17 +170,20 @@ export function MobileDrawer({
 
         {/* Drawer Scrollable Navigation Links */}
         <div className="flex-1 overflow-y-auto p-3 space-y-4 no-scrollbar">
-          {MENU_SECTIONS.map((section, sIdx) => {
-            const visibleItems = section.items.filter((it) =>
-              it.roles.includes(activeRole || "owner")
-            );
+          {navSections.map((section, sIdx) => {
+            const visibleItems = section.items
+              .map((key) => NAV_ITEM_REGISTRY[key])
+              .filter(
+                (item) =>
+                  item && item.roles.includes(activeRole || "owner")
+              );
 
             if (visibleItems.length === 0) return null;
 
             return (
               <div key={sIdx} className="space-y-1">
                 <p className="text-[10px] font-black uppercase tracking-wider text-slate-400 px-3">
-                  {section.title}
+                  {section.section}
                 </p>
                 {visibleItems.map((item) => {
                   const isActive =
@@ -329,10 +237,7 @@ export function MobileDrawer({
                       ) : (
                         item.badge && (
                           <span
-                            className={cn(
-                              "rounded-full px-2 py-0.5 text-[9px] font-extrabold uppercase",
-                              item.badgeColor || "bg-slate-100 text-slate-700"
-                            )}
+                            className="rounded-full px-2 py-0.5 text-[9px] font-extrabold uppercase bg-emerald-100 text-emerald-800"
                           >
                             {item.badge}
                           </span>

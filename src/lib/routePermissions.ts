@@ -111,20 +111,29 @@ export const ROUTE_PERMISSIONS: Record<string, RoutePermissionRule> = {
     featureName: "Antrean Pesanan Dapur Live",
     featureDescription: "Sistem tiket pesanan meja/bungkus real-time untuk dapur & barista",
   },
+  "/tables": {
+    requiresAuth: true,
+    allowedRoles: ["owner", "supervisor", "cashier"],
+    allowedTiers: ["pro", "enterprise"],
+    allowedIndustries: ["fnb", "coffeeshop", "universal"],
+    trialAllowed: true,
+    featureName: "Manajemen Meja",
+    featureDescription: "Denah meja real-time, status keterisian meja, dan integrasi pesanan dine-in",
+  },
   "/inventory": {
     requiresAuth: true,
     allowedRoles: ["owner", "supervisor"],
     allowedTiers: ["pro", "enterprise"],
-    allowedIndustries: ["fnb", "laundry", "universal"],
+    allowedIndustries: ["fnb", "coffeeshop", "retail", "laundry", "universal"],
     trialAllowed: true,
-    featureName: "Stok Bahan Baku Otomatis",
-    featureDescription: "Pengurangan otomatis stok bahan baku resep saat transaksi terjadi",
+    featureName: "Stok Bahan Baku & Barang",
+    featureDescription: "Pengurangan otomatis stok bahan baku resep dan pelacakan inventaris",
   },
   "/hpp": {
     requiresAuth: true,
     allowedRoles: ["owner"], // Hanya owner yang bisa melihat & edit HPP
     allowedTiers: ["pro", "enterprise"],
-    allowedIndustries: ["fnb", "salon", "laundry", "universal"], // Retail tidak butuh HPP
+    allowedIndustries: ["fnb", "coffeeshop", "salon", "laundry", "universal"],
     trialAllowed: true,
     featureName: "Kalkulator HPP",
     featureDescription:

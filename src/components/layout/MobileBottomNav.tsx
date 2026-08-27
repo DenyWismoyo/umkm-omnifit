@@ -36,6 +36,8 @@ export function MobileBottomNav({ onOpenMenu }: MobileBottomNavProps) {
       secondTab = { href: "/appointments", label: "Jadwal", icon: Calendar };
     } else if (activeIndustry === "retail") {
       secondTab = { href: "/barcode-scanner", label: "Scanner", icon: PackageCheck };
+    } else if (activeIndustry === "coffeeshop") {
+      secondTab = { href: "/barista-queue", label: "Barista", icon: BellRing };
     }
 
     const third = { href: "/pos", label: "Kasir", icon: ShoppingCart, isPrimary: true };

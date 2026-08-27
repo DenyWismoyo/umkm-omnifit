@@ -125,3 +125,14 @@ Semua rute (URL) yang merupakan fitur spesifik untuk industri tertentu **WAJIB**
 - Contoh: \src/app/(app)/(salon)/appointments/page.tsx\
 
 Jika suatu fitur bisa diakses lintas industri (misalnya \/orders\ bisa diakses FnB dan Universal), rute tersebut tetap dikelompokkan di bawah **industri origin/utama**-nya.
+
+---
+
+## R10. Sinkronisasi Penuh Navigasi Multi-Industri (Desktop & Mobile)
+
+Seluruh navigasi di sidebar desktop (`AppSidebar.tsx`) maupun drawer ponsel (`MobileDrawer.tsx`) dan bottom bar (`MobileBottomNav.tsx`) **WAJIB** bersumber dari `INDUSTRY_NAV_CONFIG` dan `NAV_ITEM_REGISTRY` (`src/lib/industryConfig.ts`).
+
+- **DILARANG** membuat hardcoded list menu terpisah di `MobileDrawer.tsx`.
+- Seluruh rute yang ada di `NAV_ITEM_REGISTRY` **WAJIB** memiliki definisi hak akses yang selaras di `src/lib/routePermissions.ts` (`ROUTE_PERMISSIONS`).
+- Tab dinamis `MobileBottomNav.tsx` harus menyesuaikan fitur signature industri aktif (misalnya `coffeeshop` -> `/barista-queue`, `laundry` -> `/laundry-queue`, `salon` -> `/appointments`, `retail` -> `/barcode-scanner`).
+
