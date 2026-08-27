@@ -142,14 +142,27 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <head>
-        <meta property="og:image" content="https://umkm.omnifit.cloud/og-image.png" />
-        <meta property="og:image:secure_url" content="https://umkm.omnifit.cloud/og-image.png" />
-        <meta property="og:image:type" content="image/png" />
+        {/* Primary OpenGraph JPEG & PNG for WhatsApp, FB, Telegram */}
+        <meta property="og:image" content="https://umkm.omnifit.cloud/og-image.jpg" />
+        <meta property="og:image:secure_url" content="https://umkm.omnifit.cloud/og-image.jpg" />
+        <meta property="og:image:type" content="image/jpeg" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="POS UMKM Pro - Aplikasi Kasir Online" />
-        <meta name="twitter:image" content="https://umkm.omnifit.cloud/og-image.png" />
+        <meta property="og:image:alt" content="POS UMKM Pro - Aplikasi Kasir Online & Manajemen Usaha" />
+        
+        {/* Square Thumbnail Fallback for compact mobile scrapers */}
+        <meta property="og:image" content="https://umkm.omnifit.cloud/og-thumb.jpg" />
+        <meta property="og:image:type" content="image/jpeg" />
+        <meta property="og:image:width" content="400" />
+        <meta property="og:image:height" content="400" />
+
+        {/* Legacy & Schema.org crawlers */}
+        <link rel="image_src" href="https://umkm.omnifit.cloud/og-image.jpg" />
+        <meta itemProp="image" content="https://umkm.omnifit.cloud/og-image.jpg" />
+        
+        {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content="https://umkm.omnifit.cloud/og-image.jpg" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
