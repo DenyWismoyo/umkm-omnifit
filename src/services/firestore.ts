@@ -17,6 +17,7 @@ import {
   onSnapshot,
   Unsubscribe,
   arrayUnion,
+} from "firebase/firestore";
 import { db, functions } from "@/lib/firebase";
 import { httpsCallable } from "firebase/functions";
 import {
