@@ -58,14 +58,15 @@ export const metadata: Metadata = {
     url: "https://umkm.omnifit.cloud",
     title: "POS UMKM Pro - Aplikasi Kasir Online & Manajemen Usaha Multi-Industri",
     description:
-      "Kelola penjualan, stok bahan baku, resep HPP, dan staf kasir bisnis Anda dengan mudah. Gratis Trial 30 Hari penuh!",
+      "Aplikasi Kasir Modern & Kalkulator HPP Cerdas untuk UMKM: F&B, Coffee Shop, Retail, Salon, dan Laundry. Coba Gratis Trial 30 Hari penuh!",
     siteName: "POS UMKM Pro",
     images: [
       {
-        url: "https://umkm.omnifit.cloud/icons/icon-512x512.svg",
-        width: 512,
-        height: 512,
-        alt: "POS UMKM Pro Logo",
+        url: "https://umkm.omnifit.cloud/opengraph-image",
+        width: 1200,
+        height: 630,
+        type: "image/png",
+        alt: "POS UMKM Pro Preview Banner",
       },
     ],
   },
@@ -73,8 +74,15 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "POS UMKM Pro - Aplikasi Kasir Online Multi-Industri",
     description:
-      "Aplikasi Kasir Modern untuk Kuliner, Coffee Shop, Retail, Salon, dan Laundry di Indonesia.",
-    images: ["https://umkm.omnifit.cloud/icons/icon-512x512.svg"],
+      "Aplikasi Kasir Modern untuk Kuliner, Coffee Shop, Retail, Salon, dan Laundry di Indonesia. Gratis Trial 30 Hari!",
+    images: [
+      {
+        url: "https://umkm.omnifit.cloud/twitter-image",
+        width: 1200,
+        height: 630,
+        alt: "POS UMKM Pro Preview Banner",
+      },
+    ],
   },
   robots: {
     index: true,
