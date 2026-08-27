@@ -62,7 +62,7 @@ export const onUserCreated = onDocumentCreated("users/{userId}", async (event) =
         status: "trial",
         tier: "pro",
         industry: userData.industry || "fnb",
-        planId: `${userData.industry || "fnb"}_pro_monthly`,
+        trialStartedAt: now.toISOString(),
         trialStartsAt: now.toISOString(),
         trialEndsAt: trialEndsAt.toISOString(),
         isTrial: true,
