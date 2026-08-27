@@ -23,6 +23,19 @@ import {
   FileText,
   HelpCircle,
   Share2,
+  Sparkles,
+  Tag,
+  Users,
+  ShieldCheck,
+  Scale,
+  Briefcase,
+  DollarSign,
+  Award,
+  ShoppingCart,
+  Calculator,
+  Store,
+  HeartHandshake,
+  FileBadge,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -31,7 +44,7 @@ import { toast } from "sonner";
 interface DocItem {
   id: string;
   title: string;
-  category: "manual" | "industry" | "hardware";
+  category: "feature" | "offer" | "manual" | "industry" | "hardware";
   icon: React.ReactNode;
   badge: string;
   fileName: string;
@@ -39,6 +52,92 @@ interface DocItem {
 }
 
 const DOC_ITEMS: DocItem[] = [
+  // Fitur-Fitur Sistem (public/docs/fitur/)
+  {
+    id: "fitur-kasir",
+    title: "Sistem Kasir & Transaksi Modern",
+    category: "feature",
+    icon: <ShoppingCart className="h-4 w-4" />,
+    badge: "Fitur Kasir",
+    fileName: "fitur/KASIR_DAN_TRANSAKSI.md",
+    description: "Scan barcode, multi-metode (QRIS/Tunai/Transfer/Kasbon), split bill & shift laci",
+  },
+  {
+    id: "fitur-hpp",
+    title: "Kalkulator HPP Cerdas & Stok Presisi",
+    category: "feature",
+    icon: <Calculator className="h-4 w-4" />,
+    badge: "Fitur HPP",
+    fileName: "fitur/HPP_DAN_MANAJEMEN_STOK.md",
+    description: "Recipe BoM multi-satuan, auto-deduct bahan saat transaksi & margin profit",
+  },
+  {
+    id: "fitur-multi-outlet",
+    title: "Multi-Outlet & Akses Karyawan (RBAC)",
+    category: "feature",
+    icon: <Store className="h-4 w-4" />,
+    badge: "Fitur Cabang",
+    fileName: "fitur/MULTI_OUTLET_DAN_KARYAWAN.md",
+    description: "Dashboard terpusat, transfer stok antar cabang & matrix hak akses kasir",
+  },
+  {
+    id: "fitur-loyalty-kasbon",
+    title: "Loyalitas, Promo & Buku Kasbon Digital",
+    category: "feature",
+    icon: <HeartHandshake className="h-4 w-4" />,
+    badge: "Fitur CRM",
+    fileName: "fitur/LOYALITAS_DAN_KASBON.md",
+    description: "Stempel digital reward, diskon grosir bertingkat & pengingat piutang WhatsApp",
+  },
+  {
+    id: "fitur-hardware-pwa",
+    title: "Hardware, PWA & Cetak Struk Bluetooth",
+    category: "feature",
+    icon: <Printer className="h-4 w-4" />,
+    badge: "Fitur Hardware",
+    fileName: "fitur/INTEGRASI_HARDWARE_PWA.md",
+    description: "PWA offline-first, printer thermal 58mm/80mm & kustomisasi struk",
+  },
+
+  // Dokumen Penawaran & Bisnis (public/docs/penawaran/)
+  {
+    id: "penawaran-proposal",
+    title: "Proposal Penawaran Digitalisasi UMKM",
+    category: "offer",
+    icon: <FileBadge className="h-4 w-4" />,
+    badge: "Proposal Resmi",
+    fileName: "penawaran/PROPOSAL_PENAWARAN_UMKM.md",
+    description: "Executive summary, solusi All-in-One POS & dampak nyata efisiensi toko",
+  },
+  {
+    id: "penawaran-paket-harga",
+    title: "Skema Paket Harga & Langganan",
+    category: "offer",
+    icon: <DollarSign className="h-4 w-4" />,
+    badge: "Paket Harga",
+    fileName: "penawaran/PAKET_HARGA_DAN_LANGGANAN.md",
+    description: "Free Trial 30 Hari Tanpa Kartu Kredit, Paket Pro Bulanan & Tahunan",
+  },
+  {
+    id: "penawaran-kemitraan",
+    title: "Program Kemitraan, Afiliasi & Reseller",
+    category: "offer",
+    icon: <Briefcase className="h-4 w-4" />,
+    badge: "Kemitraan",
+    fileName: "penawaran/PROGRAM_KEMITRAAN_RESELLER.md",
+    description: "Peluang komisi pasif 20%-40% recurring, bundling hardware & materi promosi",
+  },
+  {
+    id: "penawaran-roi",
+    title: "Perbandingan Fitur & Analisis ROI",
+    category: "offer",
+    icon: <Scale className="h-4 w-4" />,
+    badge: "Analisis ROI",
+    fileName: "penawaran/PERBANDINGAN_FITUR_DAN_ROI.md",
+    description: "Komparasi POS UMKM Pro vs kompetitor konvensional & kalkulasi hemat Rp1.5jt+/bln",
+  },
+
+  // Panduan Operasional (public/docs/)
   {
     id: "manual",
     title: "Buku Panduan Utama (Manual Book)",
@@ -122,8 +221,18 @@ const DOC_ITEMS: DocItem[] = [
   },
 ];
 
+const CATEGORIES = [
+  { key: "all", label: "Semua Dokumen" },
+  { key: "feature", label: "⚙️ Fitur Sistem" },
+  { key: "offer", label: "💼 Penawaran & Bisnis" },
+  { key: "industry", label: "🏢 6 Industri" },
+  { key: "manual", label: "📖 Panduan Pokok" },
+  { key: "hardware", label: "🖨️ Hardware" },
+];
+
 export default function DocsPage() {
-  const [activeDocId, setActiveDocId] = useState<string>("manual");
+  const [activeDocId, setActiveDocId] = useState<string>("fitur-kasir");
+  const [activeCategory, setActiveCategory] = useState<string>("all");
   const [docContent, setDocContent] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -158,11 +267,14 @@ export default function DocsPage() {
     setTimeout(() => setCopiedCode(null), 2000);
   };
 
-  const filteredDocs = DOC_ITEMS.filter(
-    (d) =>
+  const filteredDocs = DOC_ITEMS.filter((d) => {
+    const matchesCategory = activeCategory === "all" || d.category === activeCategory;
+    const matchesQuery =
       d.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      d.description.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+      d.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      d.badge.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesQuery;
+  });
 
   return (
     <DashboardLayout>
@@ -176,13 +288,13 @@ export default function DocsPage() {
             <div className="space-y-1.5">
               <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 px-3 py-0.5 text-xs font-bold text-emerald-400">
                 <BookOpen className="h-3.5 w-3.5" />
-                <span>Pusat Panduan & Manual Book Resmi</span>
+                <span>Pusat Dokumentasi, Fitur & Proposal Resmi</span>
               </div>
               <h1 className="text-xl sm:text-3xl font-black tracking-tight text-white">
-                Buku Panduan & Dokumentasi POS UMKM Pro
+                Dokumentasi & Pusat Penawaran POS UMKM Pro
               </h1>
               <p className="text-xs sm:text-sm text-slate-300 max-w-xl">
-                Format panduan Markdown & TXT interaktif untuk mengoperasikan kasir, 6 modul industri, Bluetooth printer thermal, dan perhitungan HPP resep.
+                Kumpulan dokumen spesifikasi fitur lengkap, proposal digitalisasi usaha, paket harga langganan, dan manual book operasional.
               </p>
             </div>
 
@@ -199,7 +311,7 @@ export default function DocsPage() {
                   className="h-10 text-xs font-bold border-slate-700 bg-slate-900/80 text-slate-200 hover:bg-slate-800 gap-1.5 cursor-pointer"
                 >
                   <Download className="h-3.5 w-3.5 text-emerald-400" />
-                  <span>Download File</span>
+                  <span>Download .MD</span>
                 </Button>
               </a>
               <a
@@ -212,23 +324,44 @@ export default function DocsPage() {
                   className="h-10 text-xs font-black bg-emerald-500 hover:bg-emerald-600 text-slate-950 gap-1.5 cursor-pointer shadow-sm"
                 >
                   <ExternalLink className="h-3.5 w-3.5" />
-                  <span>Buka Tab Baru</span>
+                  <span>Buka File Raw</span>
                 </Button>
               </a>
             </div>
           </div>
         </div>
 
-        {/* Search Bar */}
-        <div className="relative max-w-md">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-          <Input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Cari topik panduan (misal: barcode, printer, HPP, kasbon)..."
-            className="pl-10 h-11 bg-white border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 shadow-2xs"
-          />
+        {/* Filter Categories and Search */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          {/* Category Tabs */}
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 max-w-full">
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat.key}
+                type="button"
+                onClick={() => setActiveCategory(cat.key)}
+                className={`text-xs font-bold px-3 py-1.5 rounded-xl border transition-all whitespace-nowrap cursor-pointer ${
+                  activeCategory === cat.key
+                    ? "bg-emerald-600 border-emerald-600 text-white shadow-xs"
+                    : "bg-white border-slate-200 text-slate-600 hover:bg-slate-100"
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Search Bar */}
+          <div className="relative w-full md:w-80 shrink-0">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <Input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Cari fitur, harga, proposal, HPP..."
+              className="pl-10 h-10 bg-white border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 shadow-2xs"
+            />
+          </div>
         </div>
 
         {/* Main 2-Column Documentation Grid */}
@@ -237,10 +370,10 @@ export default function DocsPage() {
           {/* Left Sidebar: Navigation List (4 cols) */}
           <div className="lg:col-span-4 space-y-2">
             <span className="text-[11px] font-black uppercase tracking-wider text-slate-500 px-1 block">
-              Daftar Dokumen ({filteredDocs.length})
+              Daftar Berkas ({filteredDocs.length})
             </span>
 
-            <div className="space-y-1.5 max-h-[720px] overflow-y-auto pr-1">
+            <div className="space-y-1.5 max-h-[750px] overflow-y-auto pr-1">
               {filteredDocs.map((doc) => {
                 const isActive = doc.id === activeDocId;
                 return (
@@ -294,21 +427,21 @@ export default function DocsPage() {
             
             {/* Top Doc Header */}
             <div className="pb-4 mb-6 border-b border-slate-100 flex items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold shadow-2xs">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="h-10 w-10 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold shadow-2xs shrink-0">
                   {activeDoc.icon}
                 </div>
-                <div>
-                  <h2 className="text-base sm:text-lg font-black text-slate-900">
+                <div className="min-w-0">
+                  <h2 className="text-base sm:text-lg font-black text-slate-900 truncate">
                     {activeDoc.title}
                   </h2>
-                  <span className="text-[11px] font-mono text-slate-400">
+                  <span className="text-[11px] font-mono text-slate-400 block truncate">
                     public/docs/{activeDoc.fileName}
                   </span>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 shrink-0">
                 <button
                   type="button"
                   onClick={() => handleCopy(docContent)}
