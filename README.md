@@ -169,6 +169,20 @@ pos-umkm/
 
 ---
 
+## 📚 Pusat Panduan Pengguna & Manual Book (`public/docs/`)
+
+Panduan operasional lengkap untuk pemilik toko dan staf kasir:
+- 📘 **[Buku Panduan Utama (Manual Book)](./public/docs/MANUAL_BOOK.md)**: Setup Akun, POS Kasir, Shift Staf & Laporan Keuangan.
+- 🍽️ **[Panduan Modul Kuliner & Resto](./public/docs/INDUSTRI_KULINER.md)**: Meja QR Dine-in, Split Bill & Struk Dapur.
+- ☕ **[Panduan Modul Kedai Kopi & Cafe](./public/docs/INDUSTRI_COFFEESHOP.md)**: Antrian Barista, Kartu Stempel & Resep Kopi HPP.
+- 🛒 **[Panduan Modul Retail & Minimarket](./public/docs/INDUSTRI_RETAIL.md)**: Barcode Scanner, Grosir Bertingkat & Expired Alert.
+- ✂️ **[Panduan Modul Salon & Barbershop](./public/docs/INDUSTRI_SALON.md)**: Booking Stylist & Kalkulator Komisi Staf.
+- 🧺 **[Panduan Modul Laundry Kiloan](./public/docs/INDUSTRI_LAUNDRY.md)**: Timbangan Desimal & Tracking Status Cucian.
+- 🖨️ **[Panduan Printer Thermal](./public/docs/PANDUAN_PRINTER_THERMAL.md)**: Koneksi Bluetooth & USB (58mm/80mm).
+- 📖 **[Panduan Buku Kasbon & Hutang](./public/docs/PANDUAN_KASBON_HUTANG.md)**: Catat Piutang Pelanggan & Pelunasan Cicilan.
+
+---
+
 ## 📞 Dukungan & Lisensi
 
 Dikelola dan dikembangkan oleh tim **Omnifit Cloud**.  
