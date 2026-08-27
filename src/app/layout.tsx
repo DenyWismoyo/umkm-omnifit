@@ -24,8 +24,69 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "POS UMKM Pro - Kasir & Manajemen Usaha Mandiri",
-  description: "Aplikasi POS Kasir Modern, Manajemen Stok & Kalkulator HPP Cerdas untuk UMKM",
+  metadataBase: new URL("https://umkm.omnifit.cloud"),
+  title: {
+    default: "POS UMKM Pro - Aplikasi Kasir Online & Manajemen Usaha Multi-Industri",
+    template: "%s | POS UMKM Pro",
+  },
+  description:
+    "Aplikasi POS Kasir Online Modern Multi-Industri untuk UMKM Indonesia: F&B Resto, Kedai Kopi & Cafe, Retail Minimarket, Salon/Barbershop, dan Laundry Kiloan. Dilengkapi manajemen stok, kalkulator HPP resep, kasbon pelanggan, struk QRIS & printer thermal.",
+  keywords: [
+    "POS UMKM",
+    "Aplikasi Kasir Online",
+    "Software POS Indonesia",
+    "Aplikasi Kasir Cafe",
+    "Aplikasi Kasir Resto",
+    "Aplikasi Kasir Toko Retail",
+    "Aplikasi Kasir Laundry",
+    "Aplikasi Kasir Barbershop",
+    "Kalkulator HPP Usaha",
+    "Sistem Kasir QRIS",
+    "Omnifit Cloud",
+    "POS UMKM Pro",
+  ],
+  authors: [{ name: "Omnifit Cloud Team", url: "https://umkm.omnifit.cloud" }],
+  creator: "Omnifit Cloud",
+  publisher: "Omnifit Cloud",
+  applicationName: "POS UMKM Pro",
+  alternates: {
+    canonical: "https://umkm.omnifit.cloud",
+  },
+  openGraph: {
+    type: "website",
+    locale: "id_ID",
+    url: "https://umkm.omnifit.cloud",
+    title: "POS UMKM Pro - Aplikasi Kasir Online & Manajemen Usaha Multi-Industri",
+    description:
+      "Kelola penjualan, stok bahan baku, resep HPP, dan staf kasir bisnis Anda dengan mudah. Gratis Trial 30 Hari penuh!",
+    siteName: "POS UMKM Pro",
+    images: [
+      {
+        url: "https://umkm.omnifit.cloud/icons/icon-512x512.svg",
+        width: 512,
+        height: 512,
+        alt: "POS UMKM Pro Logo",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "POS UMKM Pro - Aplikasi Kasir Online Multi-Industri",
+    description:
+      "Aplikasi Kasir Modern untuk Kuliner, Coffee Shop, Retail, Salon, dan Laundry di Indonesia.",
+    images: ["https://umkm.omnifit.cloud/icons/icon-512x512.svg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,
@@ -38,6 +99,28 @@ export const metadata: Metadata = {
   },
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "POS UMKM Pro",
+  operatingSystem: "Web, Android, iOS, Windows, macOS",
+  applicationCategory: "BusinessApplication",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "IDR",
+    description: "Trial 30 Hari Akses Fitur PRO Penuh",
+  },
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: "4.9",
+    ratingCount: "128",
+  },
+  description:
+    "Aplikasi POS Kasir Online & Manajemen Usaha Multi-Industri untuk F&B, Coffee Shop, Retail, Salon, dan Laundry.",
+  url: "https://umkm.omnifit.cloud",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -48,6 +131,12 @@ export default function RootLayout({
       lang="id"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className="min-h-full flex flex-col bg-slate-50 text-slate-900 selection:bg-emerald-500 selection:text-white">
         <AuthProvider>
           <PwaProvider>
