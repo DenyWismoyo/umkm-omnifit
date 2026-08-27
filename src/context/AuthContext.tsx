@@ -95,7 +95,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [subscription]);
 
   const isTrialActive = useMemo(() => {
-    return subscription?.status === "trial";
+    if (!subscription || subscription.status !== "trial") return false;
+    if (!subscription.trialEndsAt) return true;
+    return new Date(subscription.trialEndsAt).getTime() > Date.now();
   }, [subscription]);
 
   const trialDaysLeft = useMemo(() => {

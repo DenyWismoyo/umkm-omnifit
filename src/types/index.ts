@@ -36,6 +36,7 @@ export interface ShopProfile {
   bankAccountNumber?: string;
   bankAccountName?: string;
   storeCode?: string; // Kode unik toko untuk login kasir (e.g. TOKO-8492)
+  trialWelcomeSeen?: boolean;
   createdAt?: string;
   updatedAt?: string;
 }

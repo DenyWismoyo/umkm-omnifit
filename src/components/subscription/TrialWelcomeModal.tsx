@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { saveShopProfile } from "@/services/firestore";
 import {
   Dialog,
   DialogContent,
@@ -21,12 +22,13 @@ import {
 import confetti from "canvas-confetti";
 
 export function TrialWelcomeModal() {
-  const { user, isTrialActive, trialDaysLeft, activeRole } = useAuth();
+  const { user, isTrialActive, trialDaysLeft, activeRole, shopProfile } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     if (!user || !isTrialActive || activeRole === "cashier") return;
+    if (shopProfile?.trialWelcomeSeen) return;
 
     // Check if user has already seen this trial welcome onboarding
     const seenKey = `pos_trial_welcome_seen_${user.uid}`;
@@ -50,11 +52,12 @@ export function TrialWelcomeModal() {
 
       return () => clearTimeout(timer);
     }
-  }, [user, isTrialActive, activeRole]);
+  }, [user, isTrialActive, activeRole, shopProfile]);
 
   const handleDismiss = () => {
     if (user) {
       localStorage.setItem(`pos_trial_welcome_seen_${user.uid}`, "true");
+      saveShopProfile(user.uid, { trialWelcomeSeen: true }).catch(() => {});
     }
     setIsOpen(false);
   };
@@ -72,7 +75,7 @@ export function TrialWelcomeModal() {
   if (!isOpen) return null;
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={(open) => { if (!open) handleDismiss(); else setIsOpen(true); }}>
       <DialogContent className="max-w-lg sm:rounded-3xl p-0 overflow-hidden border-0 sm:border border-slate-200/80 shadow-2xl bg-white flex flex-col">
         {/* Header with gradient and celebration */}
         <div className="bg-gradient-to-br from-emerald-950 via-slate-900 to-teal-950 p-6 text-white relative overflow-hidden shrink-0">
@@ -98,7 +101,7 @@ export function TrialWelcomeModal() {
             </h2>
 
             <p className="text-xs text-emerald-100/80 leading-relaxed">
-              Kami tidak langsung meminta Anda berlangganan. Silakan coba dan buktikan kemudahan aplikasi POS UMKM selama 30 hari ke depan!
+              Kami tidak langsung meminta Anda berlangganan. Akses seluruh fitur PRO dan kalkulator HPP siap Anda nikmati selama {trialDaysLeft || 30} hari ke depan!
             </p>
           </div>
         </div>

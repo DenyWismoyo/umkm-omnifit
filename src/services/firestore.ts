@@ -83,9 +83,13 @@ export async function saveShopProfile(
 ): Promise<void> {
   if (!uid) return;
   const docRef = doc(db, "users", uid);
+  const snap = await getDoc(docRef);
+  const isNew = !snap.exists();
+
   const payload = sanitizeForFirestore({
     ...profileData,
     userId: uid,
+    ...(isNew && !profileData.createdAt ? { createdAt: new Date().toISOString() } : {}),
     updatedAt: new Date().toISOString(),
   });
   await setDoc(docRef, payload, { merge: true });
@@ -698,37 +702,60 @@ export async function getUserSubscription(uid: string): Promise<UserSubscription
   const snap = await getDoc(docRef);
 
   if (!snap.exists()) {
-    // If no subscription record exists yet, initialize a 30-Day Free Trial!
-    return await initTrialSubscription(uid);
+    // If no subscription record exists yet, check if users/{uid} has createdAt
+    const userDocRef = doc(db, "users", uid);
+    const userSnap = await getDoc(userDocRef);
+    const userCreatedAt = userSnap.exists() && userSnap.data()?.createdAt
+      ? userSnap.data().createdAt
+      : new Date().toISOString();
+    return await initTrialSubscription(uid, userCreatedAt);
   }
 
   const sub = snap.data() as UserSubscription;
 
-  // Check if trial has expired or needs migration to 30-day policy
+  // Check if trial has expired or needs one-time stabilization
   if (sub.status === "trial") {
-    const startTime = sub.trialStartedAt ? new Date(sub.trialStartedAt).getTime() : new Date().getTime();
-    const endTime = sub.trialEndsAt ? new Date(sub.trialEndsAt).getTime() : startTime;
-    const durationDays = (endTime - startTime) / (1000 * 60 * 60 * 24);
-
-    // Auto-migrate legacy 3-day trial accounts (< 25 days duration) to full 30 days
-    if (durationDays < 25) {
-      const newTrialEnd = new Date(startTime + 30 * 24 * 60 * 60 * 1000);
-      sub.trialEndsAt = newTrialEnd.toISOString();
-      sub.planName = "Trial Gratis (30 Hari) + Akses HPP";
-      sub.tier = "pro";
-      await setDoc(docRef, { 
-        trialEndsAt: sub.trialEndsAt, 
-        planName: sub.planName,
-        tier: "pro",
-        updatedAt: new Date().toISOString()
-      }, { merge: true });
+    // 1. Ensure immutable trialStartedAt exists
+    let trialStartedAt = sub.trialStartedAt;
+    if (!trialStartedAt) {
+      const userDocRef = doc(db, "users", uid);
+      const userSnap = await getDoc(userDocRef);
+      trialStartedAt = userSnap.exists() && userSnap.data()?.createdAt
+        ? userSnap.data().createdAt
+        : (sub.updatedAt || new Date().toISOString());
     }
 
+    // 2. Ensure trialEndsAt is strictly 30 days from trialStartedAt
+    let trialEndsAt = sub.trialEndsAt;
+    const startTime = new Date(trialStartedAt).getTime();
+    const expectedEndTime = startTime + 30 * 24 * 60 * 60 * 1000;
+
+    if (!trialEndsAt) {
+      trialEndsAt = new Date(expectedEndTime).toISOString();
+      await setDoc(
+        docRef,
+        {
+          trialStartedAt,
+          trialEndsAt,
+          status: "trial",
+          planName: sub.planName || "Trial Gratis (30 Hari) + Akses HPP",
+          tier: "pro",
+          updatedAt: new Date().toISOString(),
+        },
+        { merge: true }
+      );
+    }
+
+    sub.trialStartedAt = trialStartedAt;
+    sub.trialEndsAt = trialEndsAt;
+
+    // 3. Check if expired
     const trialEnd = new Date(sub.trialEndsAt).getTime();
     if (Date.now() > trialEnd) {
       const expiredSub: UserSubscription = {
         ...sub,
         status: "expired",
+        tier: "basic",
         updatedAt: new Date().toISOString(),
       };
       await setDoc(docRef, expiredSub, { merge: true });
@@ -743,6 +770,7 @@ export async function getUserSubscription(uid: string): Promise<UserSubscription
       const expiredSub: UserSubscription = {
         ...sub,
         status: "expired",
+        tier: "basic",
         updatedAt: new Date().toISOString(),
       };
       await setDoc(docRef, expiredSub, { merge: true });
@@ -753,9 +781,9 @@ export async function getUserSubscription(uid: string): Promise<UserSubscription
   return sub;
 }
 
-export async function initTrialSubscription(uid: string): Promise<UserSubscription> {
-  const now = new Date();
-  const trialEnd = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 Days Free Trial
+export async function initTrialSubscription(uid: string, fixedStartDate?: string): Promise<UserSubscription> {
+  const startDate = fixedStartDate ? new Date(fixedStartDate) : new Date();
+  const trialEnd = new Date(startDate.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 Days Free Trial from fixed start date
 
   const trialSub: UserSubscription = {
     status: "trial",
@@ -763,9 +791,9 @@ export async function initTrialSubscription(uid: string): Promise<UserSubscripti
     planName: "Trial Gratis (30 Hari) + Akses HPP",
     industry: "" as any,
     tier: "pro",
-    trialStartedAt: now.toISOString(),
+    trialStartedAt: startDate.toISOString(),
     trialEndsAt: trialEnd.toISOString(),
-    updatedAt: now.toISOString(),
+    updatedAt: new Date().toISOString(),
   };
 
   const docRef = doc(db, "users", uid, "subscription", "current");
@@ -814,8 +842,18 @@ export async function activateProSubscription(
 }
 
 export async function updateUserIndustry(uid: string, industry: string): Promise<void> {
+  if (!uid) return;
   const docRef = doc(db, "users", uid, "subscription", "current");
-  await setDoc(docRef, { industry, updatedAt: new Date().toISOString() }, { merge: true });
+  const snap = await getDoc(docRef);
+
+  if (!snap.exists()) {
+    // If no subscription record exists yet, initialize trial first so dates are created properly
+    const sub = await initTrialSubscription(uid);
+    await setDoc(docRef, { ...sub, industry, updatedAt: new Date().toISOString() }, { merge: true });
+  } else {
+    // PRESERVE existing trialStartedAt and trialEndsAt!
+    await setDoc(docRef, { industry, updatedAt: new Date().toISOString() }, { merge: true });
+  }
 }
 
 
