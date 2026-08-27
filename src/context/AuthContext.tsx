@@ -59,7 +59,10 @@ interface AuthContextType {
   signOut: () => Promise<void>;
   refreshShopProfile: () => Promise<void>;
   refreshCashiers: () => Promise<void>;
-  completeOnboarding: (industry: IndustryPack) => Promise<void>;
+  completeOnboarding: (
+    industry: IndustryPack,
+    profileData?: Partial<ShopProfile>
+  ) => Promise<void>;
   loginCashierWithPin: (pin: string, cashierId?: string) => Promise<boolean>;
   logoutCashier: () => void;
   switchRoleToOwner: () => void;
@@ -463,17 +466,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     syncSessionCookie(undefined, "owner");
   };
 
-  const completeOnboarding = async (industry: IndustryPack) => {
+  const completeOnboarding = async (
+    industry: IndustryPack,
+    profileData?: Partial<ShopProfile>
+  ) => {
     if (!storeOwnerUid || !user) return;
     
     // 1. Update shop profile in state and Firestore
-    const newProfile = { ...shopProfile, industry, shopName: shopProfile?.shopName || "Toko Baru" };
-    setShopProfile(newProfile as ShopProfile);
+    const newProfile: ShopProfile = {
+      ...(shopProfile || ({} as ShopProfile)),
+      ...profileData,
+      userId: storeOwnerUid,
+      industry,
+      shopName: profileData?.shopName || shopProfile?.shopName || "Toko Baru",
+      ownerName: profileData?.ownerName || shopProfile?.ownerName || user.displayName || "Pemilik Toko",
+      email: profileData?.email || shopProfile?.email || user.email || "",
+      phoneNumber: profileData?.phoneNumber || shopProfile?.phoneNumber || "",
+      address: profileData?.address || shopProfile?.address || "",
+    };
+    
+    setShopProfile(newProfile);
     try {
-      await saveShopProfile(storeOwnerUid, { 
-        industry, 
-        shopName: newProfile.shopName 
-      });
+      await saveShopProfile(storeOwnerUid, newProfile);
     } catch (e) {
       console.warn("Could not save shop profile:", e);
     }
@@ -490,7 +504,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
     
     // 4. Re-sync cookie via API
-    await syncSessionCookie(undefined, undefined, updatedSub);
+    await syncSessionCookie(undefined, undefined, updatedSub, newProfile);
   };
 
 

@@ -52,7 +52,7 @@ export default function LoginPage() {
     if (!loading && user) {
       if (activeRole === "cashier") {
         router.replace("/pos");
-      } else if (shopProfile && !shopProfile.industry) {
+      } else if (!shopProfile || !shopProfile.industry || !shopProfile.shopName) {
         router.replace("/onboarding");
       } else {
         router.replace("/dashboard");

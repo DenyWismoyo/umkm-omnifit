@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CashierShiftModal } from "@/components/pos/CashierShiftModal";
+import { ProfileDropdown } from "@/components/layout/ProfileDropdown";
 import { toast } from "sonner";
 
 interface AppNavbarProps {
@@ -162,29 +163,9 @@ export function AppNavbar({ onOpenDrawer }: AppNavbarProps) {
             </Link>
           )}
 
-          {/* User Info & Logout */}
-          <div className="flex items-center gap-1.5 sm:gap-2 border-l border-slate-200 pl-1.5 sm:pl-3">
-            {user?.photoURL ? (
-              <img
-                src={user.photoURL}
-                alt={user.displayName || "User"}
-                className="h-7 w-7 sm:h-8 sm:w-8 rounded-full border border-slate-200 object-cover"
-              />
-            ) : (
-              <div className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-slate-100 text-slate-600 font-semibold text-xs">
-                <User className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-              </div>
-            )}
-
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleSignOut}
-              className="touch-press hidden sm:inline-flex text-rose-600 hover:bg-rose-50 hover:text-rose-700 px-2 sm:px-3 text-xs h-9"
-            >
-              <LogOut className="h-4 w-4 sm:mr-1.5" />
-              <span>Keluar</span>
-            </Button>
+          {/* Interactive Profile Dropdown (Top-Right) */}
+          <div className="flex items-center border-l border-slate-200 pl-1.5 sm:pl-2.5">
+            <ProfileDropdown />
           </div>
         </div>
       </header>
