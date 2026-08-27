@@ -1,5 +1,15 @@
 {
   "projects": {
     "default": "omnifit-system"
-  }
+  },
+  "targets": {
+    "omnifit-system": {
+      "hosting": {
+        "app": [
+          "umkm-omnifit"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }
