@@ -12,5 +12,9 @@ service firebase.storage {
       allow write: if request.auth != null 
                    && request.resource.size < 10 * 1024 * 1024;
     }
+    // Izinkan akses publik penuh untuk folder public (seperti aset OpenGraph dll)
+    match /public/{allPaths=**} {
+      allow read: if true;
+    }
   }
 }

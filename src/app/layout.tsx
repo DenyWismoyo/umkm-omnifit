@@ -62,20 +62,20 @@ export const metadata: Metadata = {
     siteName: "POS UMKM Pro",
     images: [
       {
-        url: "https://umkm.omnifit.cloud/og-image.png",
-        secureUrl: "https://umkm.omnifit.cloud/og-image.png",
+        url: "https://firebasestorage.googleapis.com/v0/b/omnifit-system.firebasestorage.app/o/public%2Fog-image.jpg?alt=media",
+        secureUrl: "https://firebasestorage.googleapis.com/v0/b/omnifit-system.firebasestorage.app/o/public%2Fog-image.jpg?alt=media",
         width: 1200,
         height: 630,
-        type: "image/png",
+        type: "image/jpeg",
         alt: "POS UMKM Pro Preview Banner",
       },
       {
-        url: "https://umkm.omnifit.cloud/icons/icon-512x512.png",
-        secureUrl: "https://umkm.omnifit.cloud/icons/icon-512x512.png",
-        width: 512,
-        height: 512,
-        type: "image/png",
-        alt: "POS UMKM Pro App Icon",
+        url: "https://firebasestorage.googleapis.com/v0/b/omnifit-system.firebasestorage.app/o/public%2Fog-thumb.jpg?alt=media",
+        secureUrl: "https://firebasestorage.googleapis.com/v0/b/omnifit-system.firebasestorage.app/o/public%2Fog-thumb.jpg?alt=media",
+        width: 300,
+        height: 300,
+        type: "image/jpeg",
+        alt: "POS UMKM Pro App Thumbnail",
       },
     ],
   },
@@ -84,7 +84,7 @@ export const metadata: Metadata = {
     title: "POS UMKM Pro - Aplikasi Kasir Online Multi-Industri",
     description:
       "Aplikasi Kasir Modern untuk Kuliner, Coffee Shop, Retail, Salon, dan Laundry di Indonesia. Gratis Trial 30 Hari!",
-    images: ["https://umkm.omnifit.cloud/og-image.png"],
+    images: ["https://firebasestorage.googleapis.com/v0/b/omnifit-system.firebasestorage.app/o/public%2Fog-image.jpg?alt=media"],
   },
   robots: {
     index: true,
@@ -143,26 +143,26 @@ export default function RootLayout({
     >
       <head>
         {/* Primary OpenGraph JPEG & PNG for WhatsApp, FB, Telegram */}
-        <meta property="og:image" content="https://umkm.omnifit.cloud/og-image.jpg" />
-        <meta property="og:image:secure_url" content="https://umkm.omnifit.cloud/og-image.jpg" />
+        <meta property="og:image" content="https://firebasestorage.googleapis.com/v0/b/omnifit-system.firebasestorage.app/o/public%2Fog-image.jpg?alt=media" />
+        <meta property="og:image:secure_url" content="https://firebasestorage.googleapis.com/v0/b/omnifit-system.firebasestorage.app/o/public%2Fog-image.jpg?alt=media" />
         <meta property="og:image:type" content="image/jpeg" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content="POS UMKM Pro - Aplikasi Kasir Online & Manajemen Usaha" />
         
         {/* Square Thumbnail Fallback for compact mobile scrapers */}
-        <meta property="og:image" content="https://umkm.omnifit.cloud/og-thumb.jpg" />
+        <meta property="og:image" content="https://firebasestorage.googleapis.com/v0/b/omnifit-system.firebasestorage.app/o/public%2Fog-thumb.jpg?alt=media" />
         <meta property="og:image:type" content="image/jpeg" />
         <meta property="og:image:width" content="400" />
         <meta property="og:image:height" content="400" />
 
         {/* Legacy & Schema.org crawlers */}
-        <link rel="image_src" href="https://umkm.omnifit.cloud/og-image.jpg" />
-        <meta itemProp="image" content="https://umkm.omnifit.cloud/og-image.jpg" />
+        <link rel="image_src" href="https://firebasestorage.googleapis.com/v0/b/omnifit-system.firebasestorage.app/o/public%2Fog-image.jpg?alt=media" />
+        <meta itemProp="image" content="https://firebasestorage.googleapis.com/v0/b/omnifit-system.firebasestorage.app/o/public%2Fog-image.jpg?alt=media" />
         
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:image" content="https://umkm.omnifit.cloud/og-image.jpg" />
+        <meta name="twitter:image" content="https://firebasestorage.googleapis.com/v0/b/omnifit-system.firebasestorage.app/o/public%2Fog-image.jpg?alt=media" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
