@@ -33,8 +33,10 @@ import {
   Receipt,
   Clock,
   Check,
+  Share2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SocialShareSection } from "@/components/common/SocialShareSection";
 
 interface IndustryFeature {
   id: string;
@@ -252,6 +254,10 @@ export default function LandingPage() {
             </a>
             <a href="#harga" className="hover:text-emerald-400 transition-colors">
               Paket Harga
+            </a>
+            <a href="#share" className="hover:text-emerald-400 transition-colors flex items-center gap-1">
+              <Share2 className="h-3.5 w-3.5 text-emerald-400" />
+              <span>Bagikan</span>
             </a>
             <a href="#faq" className="hover:text-emerald-400 transition-colors">
               FAQ
@@ -804,7 +810,10 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 7. FINAL HIGH-CONVERSION CTA BANNER */}
+      {/* 7. SOCIAL SHARE & OPENGRAPH PROMO SECTION */}
+      <SocialShareSection />
+
+      {/* 8. FINAL HIGH-CONVERSION CTA BANNER */}
       <section className="py-16 sm:py-20 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="rounded-3xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 p-8 sm:p-14 text-center text-slate-950 space-y-6 shadow-2xl shadow-emerald-600/30">
           <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-950 tracking-tight">
@@ -827,7 +836,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 8. FOOTER */}
+      {/* 9. FOOTER */}
       <footer className="border-t border-slate-850 bg-slate-950 py-12 text-slate-400 text-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
           
@@ -845,6 +854,7 @@ export default function LandingPage() {
             <a href="#industri" className="hover:text-emerald-400 transition-colors">Modul Usaha</a>
             <a href="#fitur" className="hover:text-emerald-400 transition-colors">Fitur</a>
             <a href="#harga" className="hover:text-emerald-400 transition-colors">Harga</a>
+            <a href="#share" className="hover:text-emerald-400 transition-colors">Bagikan</a>
             <Link href="/login" className="hover:text-emerald-400 transition-colors">Login Kasir</Link>
           </div>
 
