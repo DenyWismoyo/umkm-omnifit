@@ -681,9 +681,12 @@ export default function LandingPage() {
               </div>
 
               <Link href="/login" className="pt-6 block">
-                <Button variant="outline" className="w-full h-12 rounded-xl font-bold border-slate-700 text-slate-200 hover:bg-slate-800">
+                <button
+                  type="button"
+                  className="w-full h-12 rounded-xl font-bold bg-slate-800/90 hover:bg-emerald-500/15 text-emerald-400 border border-emerald-500/40 hover:border-emerald-400 transition-all cursor-pointer shadow-sm text-sm"
+                >
                   Coba Gratis Sekarang
-                </Button>
+                </button>
               </Link>
             </div>
 
@@ -712,9 +715,12 @@ export default function LandingPage() {
               </div>
 
               <Link href="/login" className="pt-6 block">
-                <Button className="w-full h-12 rounded-xl font-black bg-emerald-500 hover:bg-emerald-600 text-slate-950 shadow-lg shadow-emerald-500/25">
+                <button
+                  type="button"
+                  className="w-full h-12 rounded-xl font-black bg-gradient-to-r from-emerald-500 via-emerald-400 to-teal-400 hover:from-emerald-600 hover:to-teal-500 text-slate-950 shadow-lg shadow-emerald-500/30 transition-all hover:scale-[1.02] cursor-pointer text-sm"
+                >
                   Langganan Paket PRO
-                </Button>
+                </button>
               </Link>
             </div>
 
@@ -738,9 +744,12 @@ export default function LandingPage() {
               </div>
 
               <Link href="/login" className="pt-6 block">
-                <Button variant="outline" className="w-full h-12 rounded-xl font-bold border-slate-700 text-slate-200 hover:bg-slate-800">
+                <button
+                  type="button"
+                  className="w-full h-12 rounded-xl font-bold bg-slate-800/90 hover:bg-slate-750 text-slate-200 border border-slate-700 hover:border-slate-500 hover:bg-slate-700/60 transition-all cursor-pointer shadow-sm text-sm"
+                >
                   Hubungi Tim Enterprise
-                </Button>
+                </button>
               </Link>
             </div>
 

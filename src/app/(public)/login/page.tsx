@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -19,6 +20,15 @@ import {
   KeyRound,
   UserCheck,
   Building2,
+  ArrowLeft,
+  Lock,
+  ChevronRight,
+  Coffee,
+  ShoppingBag,
+  Scissors,
+  Shirt,
+  UtensilsCrossed,
+  Calculator,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -65,7 +75,6 @@ export default function LoginPage() {
       setSigningIn(true);
       await signInWithGoogle();
       toast.success("Login berhasil! Selamat datang di POS UMKM.");
-      // Redirect will be handled by useEffect above
     } catch (error: any) {
       console.error(error);
       if (error?.code !== "auth/popup-closed-by-user") {
@@ -121,110 +130,152 @@ export default function LoginPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-50">
-        <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
+      <div className="flex min-h-screen items-center justify-center bg-slate-950">
+        <div className="flex flex-col items-center gap-3">
+          <Loader2 className="h-8 w-8 animate-spin text-emerald-400" />
+          <p className="text-xs font-semibold text-slate-400">Memeriksa sesi pengguna...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-slate-900 text-slate-100 selection:bg-emerald-500 selection:text-white">
-      {/* Left Showcase Banner */}
-      <div className="relative flex flex-1 flex-col justify-between p-8 md:p-12 lg:p-16 overflow-hidden bg-gradient-to-br from-slate-900 via-slate-950 to-emerald-950">
+    <div className="min-h-screen lg:h-screen lg:overflow-hidden flex flex-col lg:flex-row bg-slate-950 text-slate-100 selection:bg-emerald-500 selection:text-white font-sans">
+      
+      {/* LEFT SHOWCASE PANEL (Compact on Desktop, Informative & Synced with Homepage) */}
+      <div className="relative flex-1 flex flex-col justify-between p-6 sm:p-8 lg:p-10 xl:p-12 overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-emerald-950/70 border-b lg:border-b-0 lg:border-r border-slate-800/80">
+        
         {/* Glow decoration */}
-        <div className="absolute -top-24 -left-24 h-96 w-96 rounded-full bg-emerald-500/15 blur-3xl" />
-        <div className="absolute -bottom-24 -right-24 h-96 w-96 rounded-full bg-teal-500/15 blur-3xl" />
+        <div className="absolute -top-24 -left-24 h-80 w-80 rounded-full bg-emerald-500/15 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-24 -right-24 h-80 w-80 rounded-full bg-teal-500/15 blur-3xl pointer-events-none" />
 
-        <div className="relative z-10">
-          <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 text-slate-950 shadow-lg shadow-emerald-500/25">
-              <Store className="h-6 w-6" />
+        {/* Top Branding & Home Link */}
+        <div className="relative z-10 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 text-slate-950 shadow-lg shadow-emerald-500/25 group-hover:scale-105 transition-transform">
+              <Store className="h-5 w-5 sm:h-6 sm:w-6" />
             </div>
             <div>
-              <h1 className="text-xl font-extrabold tracking-tight text-white">
-                POS UMKM PRO
-              </h1>
-              <p className="text-xs text-emerald-400 font-medium">
-                Sistem Kasir & Manajemen Usaha Mandiri
+              <span className="text-base sm:text-lg font-black tracking-tight text-white flex items-center gap-1">
+                POS UMKM <span className="text-emerald-400">Pro</span>
+              </span>
+              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+                by Omnifit Cloud
               </p>
             </div>
-          </div>
+          </Link>
 
-          <div className="mt-12 md:mt-16 max-w-lg space-y-4">
-            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1 text-xs font-semibold text-emerald-400 backdrop-blur-sm">
-              <Sparkles className="h-3.5 w-3.5" />
-              <span>Login Kasir Instan Tanpa Email</span>
-            </div>
-
-            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-white leading-tight">
-              Kelola Transaksi, Stok, dan Keuangan Usaha Anda dalam Satu Tempat.
-            </h2>
-            <p className="text-sm md:text-base text-slate-400 leading-relaxed">
-              Kasir dapat langsung login di perangkat manapun dengan <strong>Kode Toko & PIN</strong> tanpa perlu akun Google/email, menjaga keamanan akun pribadi pemilik toko.
-            </p>
-          </div>
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-400 hover:text-emerald-400 transition-colors bg-slate-900/80 hover:bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-800"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" />
+            <span>Kembali ke Beranda</span>
+          </Link>
         </div>
 
-        {/* Features highlights */}
-        <div className="relative z-10 mt-12 grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl">
-          <div className="flex items-start gap-3 rounded-2xl border border-slate-800 bg-slate-900/60 p-3.5 backdrop-blur-sm">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400">
-              <Zap className="h-4 w-4" />
+        {/* Center Pitch & Industry Badges */}
+        <div className="relative z-10 my-auto py-6 sm:py-8 space-y-4 max-w-xl">
+          
+          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-[11px] font-bold text-emerald-400 backdrop-blur-sm">
+            <Sparkles className="h-3.5 w-3.5" />
+            <span>Sistem Kasir Cloud Multi-Industri</span>
+          </div>
+
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white leading-tight">
+            Kelola Transaksi, Stok & HPP Usaha dalam Satu Tempat.
+          </h2>
+
+          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
+            Solusi kasir lengkap untuk F&B, Coffee Shop, Retail, Salon, Laundry, dan Toko Umum. Kasir staf dapat login instan dengan <strong>Kode Toko & PIN</strong> tanpa perlu akun email pribadi pemilik.
+          </p>
+
+          {/* 6 Industry Pills */}
+          <div className="flex flex-wrap items-center gap-2 pt-1">
+            {[
+              { name: "🍽️ F&B", color: "text-amber-300 bg-amber-500/10 border-amber-500/20" },
+              { name: "☕ Coffee Shop", color: "text-yellow-300 bg-yellow-500/10 border-yellow-500/20" },
+              { name: "🛒 Retail", color: "text-emerald-300 bg-emerald-500/10 border-emerald-500/20" },
+              { name: "✂️ Salon", color: "text-rose-300 bg-rose-500/10 border-rose-500/20" },
+              { name: "🧺 Laundry", color: "text-blue-300 bg-blue-500/10 border-blue-500/20" },
+              { name: "🏢 Universal", color: "text-purple-300 bg-purple-500/10 border-purple-500/20" },
+            ].map((ind, i) => (
+              <span
+                key={i}
+                className={`text-[11px] font-bold px-2.5 py-1 rounded-lg border ${ind.color}`}
+              >
+                {ind.name}
+              </span>
+            ))}
+          </div>
+
+          {/* 4 Compact Features Cards (2x2 Grid) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-3">
+            <div className="flex items-start gap-2.5 rounded-xl border border-slate-800/80 bg-slate-900/60 p-2.5 backdrop-blur-sm">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-400">
+                <Zap className="h-4 w-4" />
+              </div>
+              <div>
+                <h4 className="text-xs font-bold text-slate-200">Kasir Cepat & Struk</h4>
+                <p className="text-[10px] text-slate-400">Cetak printer Bluetooth 58/80mm & QRIS dinamis.</p>
+              </div>
             </div>
-            <div>
-              <h4 className="text-xs font-bold text-slate-200">Kasir Cepat & Struk</h4>
-              <p className="text-[11px] text-slate-400">Cetak struk thermal 58/80mm atau kirim via WhatsApp.</p>
+
+            <div className="flex items-start gap-2.5 rounded-xl border border-slate-800/80 bg-slate-900/60 p-2.5 backdrop-blur-sm">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-teal-500/15 text-teal-400">
+                <Calculator className="h-4 w-4" />
+              </div>
+              <div>
+                <h4 className="text-xs font-bold text-slate-200">Kalkulator HPP Resep</h4>
+                <p className="text-[10px] text-slate-400">Hitung modal porsi & laba bersih harian.</p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-2.5 rounded-xl border border-slate-800/80 bg-slate-900/60 p-2.5 backdrop-blur-sm">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-500/15 text-amber-400">
+                <Receipt className="h-4 w-4" />
+              </div>
+              <div>
+                <h4 className="text-xs font-bold text-slate-200">Buku Kasbon Piutang</h4>
+                <p className="text-[10px] text-slate-400">Catat hutang pelanggan & terima cicilan.</p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-2.5 rounded-xl border border-slate-800/80 bg-slate-900/60 p-2.5 backdrop-blur-sm">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-purple-500/15 text-purple-400">
+                <ShieldCheck className="h-4 w-4" />
+              </div>
+              <div>
+                <h4 className="text-xs font-bold text-slate-200">Trial 30 Hari & Keamanan</h4>
+                <p className="text-[10px] text-slate-400">Akses penuh PRO & data terisolasi aman.</p>
+              </div>
             </div>
           </div>
 
-          <div className="flex items-start gap-3 rounded-2xl border border-slate-800 bg-slate-900/60 p-3.5 backdrop-blur-sm">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-teal-500/20 text-teal-400">
-              <TrendingUp className="h-4 w-4" />
-            </div>
-            <div>
-              <h4 className="text-xs font-bold text-slate-200">Laporan Laba / Rugi</h4>
-              <p className="text-[11px] text-slate-400">Hitung otomatis omzet, modal (HPP), dan laba bersih harian.</p>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-3 rounded-2xl border border-slate-800 bg-slate-900/60 p-3.5 backdrop-blur-sm">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-amber-500/20 text-amber-400">
-              <Users className="h-4 w-4" />
-            </div>
-            <div>
-              <h4 className="text-xs font-bold text-slate-200">Buku Kasbon / Piutang</h4>
-              <p className="text-[11px] text-slate-400">Catat hutang pelanggan dan pantau sisa pelunasan.</p>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-3 rounded-2xl border border-slate-800 bg-slate-900/60 p-3.5 backdrop-blur-sm">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-purple-500/20 text-purple-400">
-              <ShieldCheck className="h-4 w-4" />
-            </div>
-            <div>
-              <h4 className="text-xs font-bold text-slate-200">100% Data Terisolasi</h4>
-              <p className="text-[11px] text-slate-400">Hanya Anda yang dapat mengakses data bisnis toko Anda.</p>
-            </div>
-          </div>
         </div>
 
-        <div className="relative z-10 mt-8 pt-6 border-t border-slate-800/80 text-xs text-slate-500">
-          © {new Date().getFullYear()} POS UMKM System. All rights reserved.
+        {/* Bottom copyright */}
+        <div className="relative z-10 pt-4 border-t border-slate-850 flex items-center justify-between text-[11px] text-slate-500">
+          <span>© 2026 POS UMKM Pro • Omnifit Cloud</span>
+          <span className="text-emerald-500/80 font-mono">v2.0 Asia-Southeast1</span>
         </div>
       </div>
 
-      {/* Right Login Card */}
-      <div className="flex w-full md:w-[480px] lg:w-[540px] flex-col justify-center bg-white p-8 md:p-12 text-slate-900 shadow-2xl">
-        <div className="w-full max-w-sm mx-auto space-y-6">
-          <div>
-            <span className="text-xs font-bold uppercase tracking-widest text-emerald-600">
-              Selamat Datang
+      {/* RIGHT LOGIN CARD (Compact, 1 Screen Height on Desktop, Clean Dark Glassmorphic) */}
+      <div className="flex w-full lg:w-[460px] xl:w-[500px] flex-col justify-center bg-slate-950 p-6 sm:p-8 lg:p-10 text-slate-100 shadow-2xl relative">
+        
+        <div className="w-full max-w-sm mx-auto space-y-5">
+          
+          {/* Header */}
+          <div className="text-left space-y-1">
+            <span className="text-[11px] font-black uppercase tracking-widest text-emerald-400">
+              Gerbang Masuk Aplikasi
             </span>
-            <h3 className="mt-1 text-2xl font-black tracking-tight text-slate-900">
+            <h3 className="text-xl sm:text-2xl font-black tracking-tight text-white">
               Masuk ke POS UMKM
             </h3>
-            <p className="mt-1.5 text-xs text-slate-500">
-              Pilih peran Anda untuk mulai mengelola toko atau melayani kasir.
+            <p className="text-xs text-slate-400">
+              Pilih peran Anda untuk mulai mengelola toko atau melayani transaksi kasir.
             </p>
           </div>
 
@@ -234,45 +285,47 @@ export default function LoginPage() {
             onValueChange={(v) => setLoginTab(v as any)}
             className="w-full"
           >
-            <TabsList className="grid grid-cols-2 w-full h-11 rounded-xl bg-slate-100 p-1">
+            <TabsList className="grid grid-cols-2 w-full h-11 rounded-xl bg-slate-900 border border-slate-800 p-1">
               <TabsTrigger
                 value="owner"
-                className="flex items-center gap-1.5 text-xs font-bold"
+                className="flex items-center justify-center gap-1.5 text-xs font-bold rounded-lg data-[state=active]:bg-emerald-500 data-[state=active]:text-slate-950 text-slate-300 transition-all cursor-pointer"
               >
-                <Store className="h-4 w-4 text-emerald-600" />
+                <Store className="h-3.5 w-3.5" />
                 <span>Pemilik Toko</span>
               </TabsTrigger>
               <TabsTrigger
                 value="cashier"
-                className="flex items-center gap-1.5 text-xs font-bold"
+                className="flex items-center justify-center gap-1.5 text-xs font-bold rounded-lg data-[state=active]:bg-amber-500 data-[state=active]:text-slate-950 text-slate-300 transition-all cursor-pointer"
               >
-                <UserCheck className="h-4 w-4 text-amber-600" />
+                <UserCheck className="h-3.5 w-3.5" />
                 <span>Login Kasir</span>
               </TabsTrigger>
             </TabsList>
 
             {/* TAB OWNER (GOOGLE LOGIN) */}
-            <TabsContent value="owner" className="space-y-4 pt-4">
-              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 space-y-2 text-xs text-slate-600">
-                <div className="flex items-center gap-2 font-bold text-slate-900">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+            <TabsContent value="owner" className="space-y-4 pt-3 text-left">
+              
+              <div className="rounded-2xl border border-emerald-500/20 bg-emerald-950/20 p-3.5 space-y-1.5 text-xs text-slate-300">
+                <div className="flex items-center gap-2 font-bold text-emerald-400">
+                  <CheckCircle2 className="h-4 w-4 shrink-0" />
                   <span>Akses Penuh Pemilik (Owner)</span>
                 </div>
-                <p className="text-slate-500 leading-relaxed pl-6">
-                  Masuk dengan akun Google untuk membuka seluruh dashboard, kalkulator HPP, pengeluaran toko, laporan laba rugi, dan manajemen staf kasir.
+                <p className="text-[11px] text-slate-400 leading-relaxed pl-6">
+                  Masuk dengan akun Google untuk membuka seluruh dashboard penjualan, HPP resep, modul industri, kasbon, dan pengaturan staf.
                 </p>
               </div>
 
-              <Button
+              {/* Google Login Button */}
+              <button
                 type="button"
                 onClick={handleGoogleLogin}
                 disabled={signingIn}
-                className="w-full h-12 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border-2 border-slate-200 hover:border-slate-300 shadow-sm flex items-center justify-center gap-3 text-sm font-semibold transition-all active:scale-[0.98]"
+                className="w-full h-12 rounded-xl bg-slate-900 hover:bg-slate-850 text-white border border-slate-700 hover:border-slate-500 shadow-lg flex items-center justify-center gap-3 text-xs sm:text-sm font-bold transition-all active:scale-[0.98] cursor-pointer"
               >
                 {signingIn ? (
-                  <Loader2 className="h-5 w-5 animate-spin text-emerald-600" />
+                  <Loader2 className="h-5 w-5 animate-spin text-emerald-400" />
                 ) : (
-                  <svg className="h-5 w-5" viewBox="0 0 24 24">
+                  <svg className="h-5 w-5 shrink-0" viewBox="0 0 24 24">
                     <path
                       d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
                       fill="#4285F4"
@@ -291,42 +344,49 @@ export default function LoginPage() {
                     />
                   </svg>
                 )}
-                <span>{signingIn ? "Menghubungkan Akun..." : "Lanjutkan dengan Google"}</span>
-              </Button>
+                <span>{signingIn ? "Menghubungkan Akun Google..." : "Lanjutkan dengan Google"}</span>
+              </button>
+
+              <div className="text-center pt-2">
+                <span className="text-[11px] text-slate-500">
+                  Pengguna baru otomatis mendapatkan <strong className="text-emerald-400">Trial 30 Hari PRO Gratis</strong>.
+                </span>
+              </div>
             </TabsContent>
 
             {/* TAB CASHIER (ANONYMOUS LOGIN VIA KODE TOKO & PIN) */}
-            <TabsContent value="cashier" className="space-y-4 pt-4">
-              <div className="rounded-2xl border border-amber-200 bg-amber-50/60 p-3 text-xs text-amber-900 space-y-1">
-                <p className="font-bold flex items-center gap-1.5">
-                  <KeyRound className="h-4 w-4 text-amber-600" />
-                  <span>Login Kasir (Tanpa Email)</span>
+            <TabsContent value="cashier" className="space-y-3 pt-2 text-left">
+              
+              <div className="rounded-xl border border-amber-500/20 bg-amber-950/20 p-2.5 text-[11px] text-amber-300 space-y-0.5">
+                <p className="font-bold flex items-center gap-1.5 text-amber-400">
+                  <KeyRound className="h-3.5 w-3.5" />
+                  <span>Login Kasir (Tanpa Akun Email)</span>
                 </p>
-                <p className="text-[11px] text-amber-800 leading-tight">
-                  Masukkan <strong>Kode Toko</strong> dan <strong>PIN Kasir</strong> yang diberikan oleh pemilik toko untuk langsung melayani transaksi.
+                <p className="text-slate-400 leading-tight">
+                  Masukkan <strong>Kode Toko</strong> & <strong>PIN Kasir</strong> dari pemilik untuk mulai transaksi.
                 </p>
               </div>
 
               {/* Form Input Kode Toko & PIN */}
-              <form onSubmit={handleCashierLoginSubmit} className="space-y-3 text-xs">
+              <form onSubmit={handleCashierLoginSubmit} className="space-y-2.5 text-xs">
                 <div>
-                  <label className="font-bold text-slate-700 block mb-1">
-                    Kode Toko (dari Pemilik Toko):
+                  <label className="font-bold text-slate-300 block mb-1 text-[11px]">
+                    Kode Toko (dari Pemilik):
                   </label>
                   <div className="relative">
-                    <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                    <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-500" />
                     <Input
                       type="text"
                       value={storeCodeInput}
                       onChange={(e) => setStoreCodeInput(e.target.value.toUpperCase())}
-                      placeholder="Contoh: TK-849201"
-                      className="pl-9 h-10 font-mono font-bold tracking-wider uppercase text-slate-900 bg-slate-50 border-slate-300"
+                      placeholder="CONTOH: TK-849201"
+                      className="pl-8 h-9 font-mono font-bold tracking-wider uppercase text-white bg-slate-900 border-slate-700 text-xs focus:border-amber-400"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="font-bold text-slate-700 block mb-1">
+                  <label className="font-bold text-slate-300 block mb-1 text-[11px]">
                     PIN Kasir (4-6 Digit):
                   </label>
                   <Input
@@ -335,72 +395,71 @@ export default function LoginPage() {
                     value={pinInput}
                     onChange={(e) => setPinInput(e.target.value)}
                     placeholder="• • • •"
-                    className="text-center text-xl tracking-[0.4em] font-mono font-bold h-11 bg-slate-50 border-emerald-400"
+                    className="text-center text-lg tracking-[0.4em] font-mono font-black h-10 bg-slate-900 border-amber-500/50 text-amber-400"
                   />
                 </div>
 
-                {/* Quick Keypad */}
-                <div className="grid grid-cols-3 gap-1.5 max-w-[220px] mx-auto pt-1">
+                {/* Compact Keypad */}
+                <div className="grid grid-cols-3 gap-1 max-w-[200px] mx-auto pt-0.5">
                   {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map((num) => (
-                    <Button
+                    <button
                       key={num}
                       type="button"
-                      variant="outline"
                       onClick={() => handleKeypadPress(num)}
-                      className="h-9 text-sm font-bold rounded-lg hover:bg-emerald-50 hover:text-emerald-800 border-slate-200"
+                      className="h-8 text-xs font-bold rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 transition-colors cursor-pointer active:scale-95"
                     >
                       {num}
-                    </Button>
+                    </button>
                   ))}
-                  <Button
+                  <button
                     type="button"
-                    variant="ghost"
                     onClick={handleClear}
-                    className="h-9 text-xs font-bold text-slate-400 hover:text-slate-700"
+                    className="h-8 text-[10px] font-bold text-slate-400 hover:text-slate-200 rounded-lg bg-slate-900/50 cursor-pointer"
                   >
                     Clear
-                  </Button>
-                  <Button
+                  </button>
+                  <button
                     type="button"
-                    variant="outline"
                     onClick={() => handleKeypadPress("0")}
-                    className="h-9 text-sm font-bold rounded-lg hover:bg-emerald-50 hover:text-emerald-800 border-slate-200"
+                    className="h-8 text-xs font-bold rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 transition-colors cursor-pointer active:scale-95"
                   >
                     0
-                  </Button>
-                  <Button
+                  </button>
+                  <button
                     type="button"
-                    variant="ghost"
                     onClick={handleBackspace}
-                    className="h-9 text-xs font-bold text-rose-500 hover:text-rose-700"
+                    className="h-8 text-xs font-bold text-rose-400 hover:text-rose-300 rounded-lg bg-slate-900/50 cursor-pointer"
                   >
                     ⌫
-                  </Button>
+                  </button>
                 </div>
 
-                <Button
+                <button
                   type="submit"
                   disabled={isVerifyingPin || !storeCodeInput.trim() || pinInput.length < 4}
-                  className="w-full h-11 text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-md shadow-emerald-600/20 mt-2"
+                  className="w-full h-10 text-xs font-black bg-amber-500 hover:bg-amber-600 disabled:opacity-50 disabled:cursor-not-allowed text-slate-950 rounded-xl shadow-md shadow-amber-500/20 mt-1 cursor-pointer transition-all flex items-center justify-center gap-2"
                 >
                   {isVerifyingPin ? (
-                    <div className="flex items-center gap-2">
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      <span>Memverifikasi Kode & PIN...</span>
-                    </div>
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin text-slate-950" />
+                      <span>Memverifikasi PIN...</span>
+                    </>
                   ) : (
-                    "Masuk ke Kasir POS"
+                    <span>Buka Kasir POS</span>
                   )}
-                </Button>
+                </button>
               </form>
             </TabsContent>
           </Tabs>
 
-          <p className="text-center text-xs text-slate-400 pt-2">
-            Dengan masuk, Anda menyetujui privasi isolasi data dan ketentuan penggunaan aplikasi POS UMKM.
+          <p className="text-center text-[11px] text-slate-500 pt-1">
+            Data Anda terenkripsi aman di Google Cloud Platform.
           </p>
+
         </div>
+
       </div>
+
     </div>
   );
 }
