@@ -1,17 +1,19 @@
-import * as functions from "firebase-functions";
+import { onSchedule } from "firebase-functions/v2/scheduler";
+import * as logger from "firebase-functions/logger";
 import { db } from "../admin";
 
 /**
- * Scheduled Cron Job: Berjalan setiap hari pada pukul 00:00 WIB (17:00 UTC)
+ * Cloud Function v2 Scheduled Cron: Berjalan setiap hari pukul 00:00 WIB (17:00 UTC)
  * Memeriksa akun trial yang sudah melewati 30 hari atau paket aktif yang habis masa berlakunya.
  */
-export const checkTrialExpiryCron = functions
-  .region("asia-southeast1")
-  .pubsub.schedule("0 17 * * *") // Daily at midnight WIB
-  .timeZone("Asia/Jakarta")
-  .onRun(async (context) => {
+export const checkTrialExpiryScheduled = onSchedule(
+  {
+    schedule: "0 17 * * *",
+    timeZone: "Asia/Jakarta",
+  },
+  async (event) => {
     const nowIso = new Date().toISOString();
-    functions.logger.info(`Running Trial & Subscription Expiry Check at ${nowIso}`);
+    logger.info(`Running Trial & Subscription Expiry Check (v2) at ${nowIso}`);
 
     try {
       // 1. Periksa akun trial yang kadaluarsa
@@ -31,7 +33,7 @@ export const checkTrialExpiryCron = functions
           });
         });
         await batch.commit();
-        functions.logger.info(`Expired ${trialSnap.size} trial accounts.`);
+        logger.info(`Expired ${trialSnap.size} trial accounts (v2).`);
       }
 
       // 2. Periksa akun aktif yang habis masa periodenya
@@ -51,12 +53,10 @@ export const checkTrialExpiryCron = functions
           });
         });
         await batch.commit();
-        functions.logger.info(`Expired ${activeSnap.size} active subscription accounts.`);
+        logger.info(`Expired ${activeSnap.size} active subscription accounts (v2).`);
       }
-
-      return null;
     } catch (error) {
-      functions.logger.error("Error in checkTrialExpiryCron:", error);
-      return null;
+      logger.error("Error in checkTrialExpiryCron (v2):", error);
     }
-  });
+  }
+);

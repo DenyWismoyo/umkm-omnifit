@@ -1,23 +1,26 @@
-import * as functions from "firebase-functions";
+import { onDocumentCreated } from "firebase-functions/v2/firestore";
+import * as logger from "firebase-functions/logger";
 import { db, admin } from "../admin";
 
 /**
- * Firestore Trigger: Dijalankan otomatis di server saat transaksi kasir tersimpan di `users/{userId}/transactions/{trxId}`.
- * Menjamin pemotongan stok fisik & pemotongan bahan baku resep (HPP) terjadi secara atomik dan konsisten.
+ * Cloud Function v2: Trigger saat transaksi kasir tersimpan di `users/{userId}/transactions/{transactionId}`.
+ * Memotong stok produk fisik dan memperbarui buku kasbon pelanggan secara atomik.
  */
-export const onTransactionCreated = functions
-  .region("asia-southeast1")
-  .firestore.document("users/{userId}/transactions/{transactionId}")
-  .onCreate(async (snap, context) => {
-    const { userId, transactionId } = context.params;
+export const onTransactionCreated = onDocumentCreated(
+  "users/{userId}/transactions/{transactionId}",
+  async (event) => {
+    const snap = event.data;
+    if (!snap) return;
+
+    const { userId, transactionId } = event.params;
     const trxData = snap.data();
 
     if (!trxData || !trxData.items || !Array.isArray(trxData.items)) {
       return;
     }
 
-    functions.logger.info(
-      `Processing atomic stock & customer debt for transaction ${transactionId} (User: ${userId})`
+    logger.info(
+      `Processing v2 atomic stock & customer debt for trx ${transactionId} (User: ${userId})`
     );
 
     try {
@@ -66,11 +69,12 @@ export const onTransactionCreated = functions
       }
 
       await batch.commit();
-      functions.logger.info(`Stock and customer data updated atomically for trx ${transactionId}`);
+      logger.info(`Stock and customer debt updated atomically (v2) for trx ${transactionId}`);
     } catch (error) {
-      functions.logger.error(
-        `Failed atomic stock deduction on transaction ${transactionId}:`,
+      logger.error(
+        `Failed v2 atomic stock deduction on trx ${transactionId}:`,
         error
       );
     }
-  });
+  }
+);

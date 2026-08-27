@@ -1,9 +1,13 @@
-import * as functions from "firebase-functions";
+import { onRequest } from "firebase-functions/v2/https";
+import * as logger from "firebase-functions/logger";
 import { db } from "../admin";
 
-export const paymentWebhook = functions
-  .region("asia-southeast1")
-  .https.onRequest(async (req, res) => {
+/**
+ * Cloud Function v2: HTTPS Webhook Handler untuk Callback Pembayaran Mayar.id & QRIS.
+ */
+export const paymentWebhook = onRequest(
+  { cors: true },
+  async (req, res) => {
     // Only accept POST requests
     if (req.method !== "POST") {
       res.status(405).send("Method Not Allowed");
@@ -12,20 +16,15 @@ export const paymentWebhook = functions
 
     try {
       const payload = req.body;
-      functions.logger.info("Received Payment Webhook Payload:", JSON.stringify(payload));
+      logger.info("Received Payment Webhook Payload (v2):", JSON.stringify(payload));
 
-      /**
-       * Expected Mayar Webhook format:
-       * payload.event === "payment.received" || payload.status === "SUCCESS"
-       * payload.customer.email or payload.metadata.userId
-       */
       const userId = payload?.metadata?.userId || payload?.extraData?.userId;
       const planId = payload?.metadata?.planId || payload?.extraData?.planId || "fnb_pro_monthly";
       const amount = payload?.amount || payload?.data?.amount || 0;
       const status = payload?.status || payload?.event;
 
       if (!userId) {
-        functions.logger.warn("Webhook missing userId in metadata");
+        logger.warn("Webhook missing userId in metadata");
         res.status(400).json({ error: "Missing userId in metadata" });
         return;
       }
@@ -42,7 +41,6 @@ export const paymentWebhook = functions
         const periodDays = isYearly ? 365 : 30;
         const periodEnd = new Date(now.getTime() + periodDays * 24 * 60 * 60 * 1000);
 
-        // Derive industry from planId (e.g. fnb_pro_monthly -> fnb)
         const industry = planId.split("_")[0] || "fnb";
         const tier = planId.includes("enterprise") ? "enterprise" : "pro";
 
@@ -94,14 +92,15 @@ export const paymentWebhook = functions
 
         await batch.commit();
 
-        functions.logger.info(`User ${userId} upgraded to ${tier} (${industry}) via Mayar webhook.`);
+        logger.info(`User ${userId} upgraded to ${tier} (${industry}) via Mayar webhook v2.`);
         res.status(200).json({ status: "success", message: "Subscription upgraded successfully" });
         return;
       }
 
       res.status(200).json({ status: "ignored", message: "Event not a success payment" });
     } catch (error: any) {
-      functions.logger.error("Error processing payment webhook:", error);
+      logger.error("Error processing payment webhook (v2):", error);
       res.status(500).json({ error: error.message || "Internal Server Error" });
     }
-  });
+  }
+);

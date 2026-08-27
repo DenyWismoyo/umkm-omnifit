@@ -1,12 +1,12 @@
 import "./admin";
 
-// Export Auth & Cashier Functions
+// Export v2 Auth & Cashier Functions
 export { onUserCreated } from "./auth/onUserCreated";
 export { verifyCashierPin } from "./auth/verifyCashierPin";
 
-// Export Subscriptions & Payment Functions
+// Export v2 Subscriptions & Payment Functions
 export { paymentWebhook } from "./subscriptions/paymentWebhook";
-export { checkTrialExpiryCron } from "./subscriptions/checkTrialExpiry";
+export { checkTrialExpiryScheduled } from "./subscriptions/checkTrialExpiry";
 
-// Export Inventory & Transaction Triggers
+// Export v2 Inventory & Transaction Triggers
 export { onTransactionCreated } from "./inventory/atomicStockDeduct";
